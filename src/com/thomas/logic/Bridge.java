@@ -53,7 +53,7 @@ public final class Bridge {
 				if (HasDataB()) {
 					I牌堆数据 tiles = PeekDataB();
 //					ClientMain.frameWin.refreshPowerTest(tiles);//刷新功率
-					ClientMain.frameWin.refresh(Ulti.convertTilesToArray(tiles),tiles.getTileSetId());
+//					ClientMain.frameWin.refresh(Ulti.convertTilesToArray(tiles),tiles.getTileSetId());
 //					logicB.changeTiles(tiles);
 				} else {
 					try {

@@ -245,9 +245,9 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 				}
 			}
 			//如果是牌显示测试界面，需要下发快速上报命令
-			if (ClientMain.frameWin != null && ClientMain.frameWin.getjTabbedpane().getTitleAt(0).equals("A")) {
+			if (true) {
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(4000);
 					ChannelFuture cf = ClientMain.loginWin.getChannelFuture();
 					ByteBuf cmdBuf = cf.channel().alloc().buffer();
 					cmdBuf.writeShort(ConstantValue.USERTYPE);
@@ -630,8 +630,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 //		
 		//测试用。。。。
 //		processPlayerTest(bTileValue,bNeighbor1,bNeighbor2,ix,databuf[5] & 0xFF,databuf[6] & 0xFF,iPower);
-
-		//每600ms更新一下时间
+//
+//		//每600ms更新一下时间
 //		if((sTileSetid&0xFF) == 0x2E && (bTileValue&0xFF) == 0x37 && (bNeighbor1&0xFF) == 0x3A && (bNeighbor2&0xFF) == 0x5B){
 //			//update time
 //			ClientMain.updateTime();
@@ -648,57 +648,55 @@ public class ClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
 //				I牌堆数据 data = new I牌堆数据(Bridge.tilesReferenceB);
 //				Bridge.TilesChangedB(data);		
 //			}				
-//			if (ClientMain.frameWin != null) {
-//				ClientMain.frameWin.repaint();
-//			}
+//			ClientMain.frameWin.repaint();
 //		}
-		
-		
-		
-		if(sTileSetid == playerAid){
-			curTilesetid = playerAid;
-//			// 有效并且变化,通知算法部分并绘制图形界面
-//			if ((sTileSetid&0xFF) == 0x2E && (bTileValue&0xFF) == 0x37 && (bNeighbor1&0xFF) == 0x3A && (bNeighbor2&0xFF) == 0x5B /*&& Bridge.tilesReferenceA.getChanged()*/) {
-//				//检查超时情况
-//				Bridge.tilesReferenceA.CheckAndRemoveTimeout(ClientMain.offlinetimes);
-//				//变化了才刷新
-//		//		if(Bridge.tilesReferenceA.getChanged()){
-//					//发送给算法部分
-//					I牌堆数据 data = new I牌堆数据(Bridge.tilesReferenceA);
-//					Bridge.TilesChangedA(data);		
-//		//			LogHelper.log.info(data.toString());
-//	//			}
-//			}else{
-				// 更新这个牌
+//		
+//		
+//		
+//		if(sTileSetid == playerAid){
+//			curTilesetid = playerAid;
+////			// 有效并且变化,通知算法部分并绘制图形界面
+////			if ((sTileSetid&0xFF) == 0x2E && (bTileValue&0xFF) == 0x37 && (bNeighbor1&0xFF) == 0x3A && (bNeighbor2&0xFF) == 0x5B /*&& Bridge.tilesReferenceA.getChanged()*/) {
+////				//检查超时情况
+////				Bridge.tilesReferenceA.CheckAndRemoveTimeout(ClientMain.offlinetimes);
+////				//变化了才刷新
+////		//		if(Bridge.tilesReferenceA.getChanged()){
+////					//发送给算法部分
+////					I牌堆数据 data = new I牌堆数据(Bridge.tilesReferenceA);
+////					Bridge.TilesChangedA(data);		
+////		//			LogHelper.log.info(data.toString());
+////	//			}
+////			}else{
+//				// 更新这个牌
 //				Bridge.tilesReferenceA.UpdateSingleTile(bTileValue,
 //						bNeighbor1, bNeighbor2, iDirection, iZDirection, iPower); 
 //				//设置牌副id
 //				Bridge.tilesReferenceA.setiTileSetId(sTileSetid);
-//			}						
-		}else if(sTileSetid == playerBid){
-			curTilesetid = playerBid;
-//			// 有效并且变化,通知算法部分并绘制图形界面
-//			if ((sTileSetid&0xFF) == 0x2E && (bTileValue&0xFF) == 0x37 && (bNeighbor1&0xFF) == 0x3A && (bNeighbor2&0xFF) == 0x5B /*&& Bridge.tilesReferenceA.getChanged()*/) {
-//				//检查超时情况
-//				Bridge.tilesReferenceB.CheckAndRemoveTimeout(ClientMain.offlinetimes);
-//				//变化了才刷新
-//				//		if(Bridge.tilesReferenceA.getChanged()){
-//					//发送给算法部分
-//					I牌堆数据 data = new I牌堆数据(Bridge.tilesReferenceB);
-//					Bridge.TilesChangedB(data);		
-//					//			LogHelper.log.info(data.toString());
-//				//}
-//			}else{
-				// 更新这个牌
+////			}						
+//		}else if(sTileSetid == playerBid){
+//			curTilesetid = playerBid;
+////			// 有效并且变化,通知算法部分并绘制图形界面
+////			if ((sTileSetid&0xFF) == 0x2E && (bTileValue&0xFF) == 0x37 && (bNeighbor1&0xFF) == 0x3A && (bNeighbor2&0xFF) == 0x5B /*&& Bridge.tilesReferenceA.getChanged()*/) {
+////				//检查超时情况
+////				Bridge.tilesReferenceB.CheckAndRemoveTimeout(ClientMain.offlinetimes);
+////				//变化了才刷新
+////				//		if(Bridge.tilesReferenceA.getChanged()){
+////					//发送给算法部分
+////					I牌堆数据 data = new I牌堆数据(Bridge.tilesReferenceB);
+////					Bridge.TilesChangedB(data);		
+////					//			LogHelper.log.info(data.toString());
+////				//}
+////			}else{
+//				// 更新这个牌
 //				Bridge.tilesReferenceB.UpdateSingleTile(bTileValue,
 //						bNeighbor1, bNeighbor2, iDirection, iZDirection, iPower); 
 //				//设置牌副id
 //				Bridge.tilesReferenceB.setiTileSetId(sTileSetid);
-//			}	
-		}else {
-			LogHelper.log.info("当前牌副ID不合法！！！");
-			return;
-		}
+////			}	
+//		}else {
+//			LogHelper.log.info("当前牌副ID不合法！！！");
+//			return;
+//		}
 	}
 	
 	/**

@@ -23,6 +23,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -71,11 +78,13 @@ public class TestDialog extends javax.swing.JFrame {
 	public static int state;
 	public static int mstate;
 	public int startIndex = 0;
+	public static String com = "";
 	
     /**
      * Creates new form TestDialog
      */
     public TestDialog() {
+    	getConfigXml();
         initComponents();
         setState1(state);
         setState2(mstate);
@@ -133,7 +142,7 @@ public class TestDialog extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(1200, 100));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jLabel3.setText("配牌器状态:");
+        jLabel3.setText("配置器状态:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         jPanel1.add(jLabel3, gridBagConstraints);
@@ -184,6 +193,7 @@ public class TestDialog extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
         jPanel1.add(jLabel1, gridBagConstraints);
 
+        jTextField1.setText(com);
         jTextField1.setMinimumSize(new java.awt.Dimension(100, 24));
         jTextField1.setPreferredSize(new java.awt.Dimension(100, 24));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -314,7 +324,7 @@ public class TestDialog extends javax.swing.JFrame {
         });
         jPanel3.add(jButton4, new java.awt.GridBagConstraints());
 
-        jButton5.setText("牌启动");
+        jButton5.setText("启动");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -322,7 +332,7 @@ public class TestDialog extends javax.swing.JFrame {
         });
         jPanel3.add(jButton5, new java.awt.GridBagConstraints());
 
-        jButton6.setText("牌停止");
+        jButton6.setText("停止");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -348,6 +358,13 @@ public class TestDialog extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+    	try {
+			setConfigXml();
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		if (serialCommNew != null) {
 			serialCommNew.Stop();
 		}
@@ -618,7 +635,7 @@ public class TestDialog extends javax.swing.JFrame {
 			cmdBuf.writeInt(0xFBFEBFEF);
 
 			cf.channel().writeAndFlush(cmdBuf);
-			log += "下发配牌器命令成功\n";
+			log += "下发配置器命令成功\n";
 			jTextArea1.setText(log);
 			JScrollBar scrollBar = jScrollPane1.getVerticalScrollBar();
 			scrollBar.setValue(scrollBar.getMaximum());
@@ -636,7 +653,7 @@ public class TestDialog extends javax.swing.JFrame {
 	 */
 	public void ReceiveStep2(int voltage) {
 		System.out.println("begin ReceiveStep2 index is " + index);
-		log += "收到配牌器应答\n";
+		log += "收到配置器应答\n";
 		jTextArea1.setText(log);
 		JScrollBar scrollBar = jScrollPane1.getVerticalScrollBar();
 		scrollBar.setValue(scrollBar.getMaximum());
@@ -670,7 +687,7 @@ public class TestDialog extends javax.swing.JFrame {
 			cmdBuf2.writeInt(0xFBFEBFEF);
 
 			cf.channel().writeAndFlush(cmdBuf2);
-			log += "下发牌启动命令成功\n";
+			log += "下发启动命令成功\n";
 			jTextArea1.setText(log);
 			JScrollBar scrollBar = jScrollPane1.getVerticalScrollBar();
 			scrollBar.setValue(scrollBar.getMaximum());
@@ -705,7 +722,7 @@ public class TestDialog extends javax.swing.JFrame {
 	 */
 	public void ReceiveStep3(int sTileSetid, int bTileValue, int bNeighbor1, int bNeighbor2, int iDirection, int iZDirection, int iPower) {
 		System.out.println("begin ReceiveStep3 index is " + index);
-		log += "收到上报牌信息\n";
+		log += "收到上报信息\n";
 		jTextArea1.setText(log);
 		JScrollBar scrollBar = jScrollPane1.getVerticalScrollBar();
 		scrollBar.setValue(scrollBar.getMaximum());
@@ -823,7 +840,7 @@ public class TestDialog extends javax.swing.JFrame {
 			cmdBuf2.writeInt(0xFBFEBFEF);
 
 			cf.channel().writeAndFlush(cmdBuf2);
-			log += "下发牌停止命令成功\n";
+			log += "下发停止命令成功\n";
 			jTextArea1.setText(log);
 			JScrollBar scrollBar = jScrollPane1.getVerticalScrollBar();
 			scrollBar.setValue(scrollBar.getMaximum());
@@ -839,7 +856,7 @@ public class TestDialog extends javax.swing.JFrame {
 	 */
 	public void ReceiveStep4() {
 		System.out.println("ReceiveStep4 index is " + index);
-		log += "收到牌停止应答\n";
+		log += "收到停止应答\n";
 		jTextArea1.setText(log);
 		JScrollBar scrollBar = jScrollPane1.getVerticalScrollBar();
 		scrollBar.setValue(scrollBar.getMaximum());
@@ -1072,6 +1089,41 @@ public class TestDialog extends javax.swing.JFrame {
 			cell.setCellStyle(style);
 		}
 		cell.setCellValue(value);
+	}
+	
+	public static void getConfigXml() {
+		try {
+			File f = new File("./conf/configTest.xml");
+			SAXReader reader = new SAXReader();
+			Document doc = reader.read(f);
+			Element root = doc.getRootElement();
+			List<Element> elements = root.elements();
+			for (Element e : elements) {
+				if (e.attribute("key").getValue().equals("COM")) {
+					com = e.attribute("value").getValue();
+					break;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setConfigXml() throws DocumentException, IOException {
+		Document doc = DocumentHelper.createDocument();
+		Element root = doc.addElement("root");
+			Element element = root.addElement("param");
+			element.addAttribute("key", "COM");
+			element.addAttribute("value", jTextField1.getText().trim());
+
+		FileOutputStream out = new FileOutputStream("./conf/configTest.xml");
+
+		// 指定文本的写出的格式：
+		OutputFormat format = OutputFormat.createPrettyPrint();
+		format.setEncoding("UTF-8");
+		XMLWriter writer = new XMLWriter(out, format);
+		writer.write(doc);
+		writer.close();
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
