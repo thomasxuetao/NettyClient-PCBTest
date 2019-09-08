@@ -211,14 +211,38 @@ public class SerialCommNew extends Observable implements SerialPortEventListener
 		}
 	}
 
-	public final void Stop() {
-		try {
+//	public final void Stop() {
+//		try {
+//			serialPort.close();
+//			serialPort = null;
+//			commPort = null;
+//		} catch (RuntimeException e) {
+//		}
+//	}
+	
+	public void Stop() {
+		if (serialPort != null) {
+			serialPort.notifyOnDataAvailable(false);
+			serialPort.removeEventListener();
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+					inputStream = null;
+				}
+				catch (IOException e) {}
+			}
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+					outputStream = null;
+				}
+				catch (IOException e) {}
+			}
 			serialPort.close();
 			serialPort = null;
-			commPort = null;
-		} catch (RuntimeException e) {
 		}
 	}
+
 
 	public static String FormatToString(byte[] orig) {
 		String result = "";
