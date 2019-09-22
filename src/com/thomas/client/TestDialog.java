@@ -5,6 +5,9 @@
  */
 package com.thomas.client;
 
+import java.awt.AWTEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -355,6 +358,29 @@ public class TestDialog extends javax.swing.JFrame {
 
         pack();
         setLocationRelativeTo(null);
+        
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+		try {
+			enableEvents(AWTEvent.WINDOW_EVENT_MASK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				int option = JOptionPane.showConfirmDialog(TestDialog.this,
+						"是否退出软件? ", "提示 ", JOptionPane.YES_NO_OPTION);
+				if (option == JOptionPane.YES_OPTION){
+					if (e.getWindow() == TestDialog.this) {
+						System.exit(0);
+					} else {
+						return;
+					}
+				}
+			}
+		});
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
